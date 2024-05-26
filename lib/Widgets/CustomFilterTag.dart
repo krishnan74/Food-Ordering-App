@@ -29,7 +29,7 @@ class _CustomFilterTagState extends State<CustomFilterTag> {
       },
       child: Center(
         child: Container(
-          width: 120.0,
+          width: 130.0,
 
           padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
           decoration: BoxDecoration(

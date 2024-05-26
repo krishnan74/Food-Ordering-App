@@ -86,6 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
     else{
       foodTypeFilters.add(foodTypeFilter);
     }
+    updateFilteredFoods();
   }
 
 
@@ -147,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           onPressed: (){
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => CartPage()),
+                              MaterialPageRoute(builder: (context) => CartPage(supabase: supabase,)),
                             );
                           }, icon: Icon(Icons.shopping_cart, color: Colors.white)),
                     )
@@ -176,6 +177,35 @@ class _MyHomePageState extends State<MyHomePage> {
                             return CustomFilterTag(
                                 onSelected: () => addCuisineFilter(cuisine)
                             , tagString: cuisine);
+                          },
+                        ),
+                      );
+                    } else {
+                      return Center(child: Text('No cuisines available'));
+                    }
+                  },
+                ),
+
+                FutureBuilder<List<String>>(
+                  future: foodTypes,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (snapshot.hasData) {
+                      return SizedBox(
+                        height: 50.0,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: snapshot.data!.length,
+                          separatorBuilder: (context, index) => SizedBox(width: 20.0),
+                          itemBuilder: (context, index) {
+                            final foodType = snapshot.data![index];
+
+                            return CustomFilterTag(
+                                onSelected: () => addFoodTypeFilter(foodType)
+                                , tagString: foodType);
                           },
                         ),
                       );
