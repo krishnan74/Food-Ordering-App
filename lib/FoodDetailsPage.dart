@@ -1,14 +1,18 @@
 import 'package:epicure_intern_task/Widgets/CustomCheckBox.dart';
 import 'package:flutter/material.dart';
 import './Models/FoodModel.dart';
+import './Helpers/Utils.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 
 class FoodDetailsPage extends StatefulWidget {
-  const FoodDetailsPage({Key? key, required this.food}) : super(key: key);
+  const FoodDetailsPage({Key? key, required this.food, required this.supabase}) : super(key: key);
 
   final Food food;
+  final SupabaseClient supabase;
 
   @override
-  State<FoodDetailsPage> createState() => _FoodDetailsPageState(food: food);
+  State<FoodDetailsPage> createState() => _FoodDetailsPageState(food: food, supabase: supabase);
 }
 
 class _FoodDetailsPageState extends State<FoodDetailsPage> {
@@ -17,8 +21,10 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
   bool variation2Check = false;
   bool variation3Check = false;
   bool variation4Check = false;
+  int quantity = 1;
+  final SupabaseClient supabase;
 
-  _FoodDetailsPageState({required this.food});
+  _FoodDetailsPageState({required this.food, required this.supabase});
 
   @override
   void initState() {
@@ -33,9 +39,8 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
         title: Text('Food Details'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: ListView( // Replace ListView with Column
-
+        padding: const EdgeInsets.only(left:20.0, right: 20.0, top: 20.0, bottom: 0.0),
+        child: ListView(
           children: <Widget>[
             ClipRRect(
               borderRadius: BorderRadius.circular(20.0),
@@ -105,12 +110,12 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
                   ),
                   SizedBox(height: 10.0),
                   Text(
-                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                    food.description,
                     style: TextStyle(color: Colors.grey[500]),
                   ),
                   SizedBox(height: 20.0),
                   Text(
-                    "Choose your variation ",
+                    "Choose your variation",
                     style: TextStyle(
                       fontSize: 17.0,
                       fontWeight: FontWeight.bold,
@@ -118,9 +123,7 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
                   ),
                   SizedBox(height: 15.0),
                   Column(
-
                     children: [
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -146,7 +149,7 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 10.0,),
+                      SizedBox(height: 10.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -180,9 +183,63 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
           ],
         ),
       ),
+      bottomNavigationBar: BottomAppBar(
+
+        surfaceTintColor: Colors.white,
+        child: Container(
+          color: Colors.white,
+          padding: EdgeInsets.symmetric(horizontal: 10.0),
+
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.remove),
+                    onPressed: () {
+                      setState(() {
+                        if (quantity > 1) quantity--;
+                      });
+                    },
+                  ),
+                  Text(
+                    quantity.toString(),
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.add),
+                    onPressed: () {
+                      setState(() {
+                        quantity++;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  addToCart(food, variation1Check, variation2Check, variation3Check, variation4Check, quantity, supabase);
+                },
+                child: Text(
+                  'Add to Cart',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17.0,),
+                ),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                  backgroundColor: Color.fromRGBO(251, 127, 107, 1.0)
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
-
-
-
 }

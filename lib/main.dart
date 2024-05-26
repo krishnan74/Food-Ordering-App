@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import './Models/FoodModel.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import './Helpers/Fetchers.dart';
+import 'CartPage.dart';
 
 Future<void> main() async {
   await Supabase.initialize(
@@ -108,28 +109,49 @@ class _MyHomePageState extends State<MyHomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 30.0,),
-                Text.rich(
-                  TextSpan(
-                    children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text.rich(
                       TextSpan(
-                        text: 'Welcome to \n',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        children: [
+                          TextSpan(
+                            text: 'Welcome to \n',
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextSpan(
+                            text: 'Flavor Central! ',
+                            style: TextStyle(
+                              fontSize: 30.0,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromRGBO(251, 127, 107, 1.0),
+                            ),
+                          ),
+
+
+                        ],
                       ),
-                      TextSpan(
-                        text: 'Flavor Central! ',
-                        style: TextStyle(
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(5.0),
+
+                      decoration: BoxDecoration(
                           color: Color.fromRGBO(251, 127, 107, 1.0),
-                        ),
+                          borderRadius: BorderRadius.circular(10.0)
                       ),
+                      child: IconButton(
 
-
-                    ],
-                  ),
+                          onPressed: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => CartPage()),
+                            );
+                          }, icon: Icon(Icons.shopping_cart, color: Colors.white)),
+                    )
+                  ],
                 ),
 
                 SizedBox(height: 5.0),
@@ -185,7 +207,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => FoodDetailsPage(food: food)),
+                            MaterialPageRoute(builder: (context) => FoodDetailsPage(food: food, supabase: supabase,)),
                           );
                         },
                       );

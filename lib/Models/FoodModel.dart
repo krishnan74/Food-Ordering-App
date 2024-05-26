@@ -5,6 +5,8 @@ class Food {
   final String foodPic;
   final String foodType;
 
+  final String description;
+
   final String variation1;
   final double price1;
 
@@ -24,6 +26,7 @@ class Food {
     required this.foodCuisine,
     required this.foodPic,
     required this.foodType,
+    required this.description,
     required this.variation1,
     required this. price1,
     required this.variation2,
@@ -42,6 +45,7 @@ class Food {
       foodCuisine: json['foodCuisine'],
       foodPic: json['foodPic'],
       foodType: json['foodType'],
+      description: json['description'],
       variation1: json['variation1'],
       price1: json['price1'].toDouble(),
       variation2: json['variation2'],
