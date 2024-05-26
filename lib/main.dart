@@ -2,10 +2,13 @@ import 'dart:convert';
 import 'package:epicure_intern_task/FoodDetailsPage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:epicure_intern_task/Widgets/FoodCard.dart';
+import './Helpers/Utils.dart';
+import './Widgets/CustomFilterTag.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import './Models/FoodModel.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import './Helpers/Fetchers.dart';
 
 Future<void> main() async {
   await Supabase.initialize(
@@ -45,67 +48,160 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-Future<List<Food>> getFutureFood() async {
-  final response = await supabase.from('foodTable').select('*');
-
-  final data = response;
-  return data.map((item) => Food.fromJson(item)).toList();
-}
 
 class _MyHomePageState extends State<MyHomePage> {
 
 
   Future<List<Food>>? futureFood;
+  Future<List<String>>? cuisines;
+  Future<List<String>>? foodTypes;
+
+  List<String> foodTypeFilters = [];
+  List<String> foodCuisineFilters = [];
 
   @override
   void initState() {
     super.initState();
-    futureFood = getFutureFood();
+    futureFood = getFutureFood(foodTypeFilters, foodCuisineFilters, supabase);
+    cuisines = getCuisines(supabase);
+    foodTypes = getFoodTypes(supabase);
+
+  }
+
+  void addCuisineFilter(String cuisineFilter){
+    if( foodCuisineFilters.contains(cuisineFilter)){
+      foodCuisineFilters.remove(cuisineFilter);
+    }
+    else{
+      foodCuisineFilters.add(cuisineFilter);
+    }
+    updateFilteredFoods();
+  }
+
+  void addFoodTypeFilter(String foodTypeFilter){
+    if( foodTypeFilters.contains(foodTypeFilter)){
+      foodTypeFilters.remove(foodTypeFilter);
+    }
+    else{
+      foodTypeFilters.add(foodTypeFilter);
+    }
+  }
+
+
+  void updateFilteredFoods(){
+    setState(() {
+      futureFood = getFutureFood(foodTypeFilters, foodCuisineFilters, supabase);
+    });
 
   }
 
 
-  @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(
 
-        backgroundColor: Color.fromRGBO(251,127,107, 1.0),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 30.0,),
+                Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Welcome to \n',
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      TextSpan(
+                        text: 'Flavor Central! ',
+                        style: TextStyle(
+                          fontSize: 30.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromRGBO(251, 127, 107, 1.0),
+                        ),
+                      ),
 
-        title: Text(widget.title, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, letterSpacing: 2.0),),
-      )
-      ,
 
-      body: FutureBuilder<List<Food>>(
-        future: futureFood,
-        builder: (context, snapshot){
-          if(snapshot.hasData){
-            return ListView.separated(
-              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+                    ],
+                  ),
+                ),
 
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index){
-                final food = snapshot.data![index];
-                return FoodCard(foodName: food.foodName, foodRate: food.foodRate, foodCuisine: food.foodCuisine, foodPic: food.foodPic,
-                  onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => FoodDetailsPage(food: food)));
-                  },);
-              }, separatorBuilder: (context, index) => SizedBox(
-                  height: 20.0,
+                SizedBox(height: 5.0),
+
+                FutureBuilder<List<String>>(
+                  future: cuisines,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (snapshot.hasData) {
+                      return SizedBox(
+                        height: 50.0,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: snapshot.data!.length,
+                          separatorBuilder: (context, index) => SizedBox(width: 20.0),
+                          itemBuilder: (context, index) {
+                            final cuisine = snapshot.data![index];
+
+                            return CustomFilterTag(
+                                onSelected: () => addCuisineFilter(cuisine)
+                            , tagString: cuisine);
+                          },
+                        ),
+                      );
+                    } else {
+                      return Center(child: Text('No cuisines available'));
+                    }
+                  },
                 )
-            );
-          }
-
-          else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-          return const Center(child: CircularProgressIndicator());
-          }
-        }
-      )
 
 
+              ],
+            ),
+          ),
+          Expanded(
+            child: FutureBuilder<List<Food>>(
+              future: futureFood,
+              builder: (context, snapshot){
+                if(snapshot.hasData){
+                  return ListView.separated(
+                    padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index){
+                      final food = snapshot.data![index];
+                      return FoodCard(
+                        foodName: food.foodName,
+                        foodRate: food.foodRate,
+                        foodCuisine: food.foodCuisine,
+                        foodPic: food.foodPic,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => FoodDetailsPage(food: food)),
+                          );
+                        },
+                      );
+                    },
+                    separatorBuilder: (context, index) => SizedBox(height: 20.0),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

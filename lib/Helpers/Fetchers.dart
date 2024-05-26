@@ -30,11 +30,11 @@ Future<List<Food>> getFutureFood(List<String> foodTypeConditions, List<String> f
 Future<List<String>> getCuisines(SupabaseClient supabase) async{
   final response = await supabase.from('foodTable').select('foodCuisine');
   final cuisines = response.map((cuisine) => cuisine['foodCuisine'].toString()).toList();
-  return cuisines;
+  return cuisines.toSet().toList();
 }
 
 Future<List<String>> getFoodTypes(SupabaseClient supabase) async{
   final response = await supabase.from('foodTable').select('foodType');
   final foodTypes = response.map((cuisine) => cuisine['foodType'].toString()).toList();
-  return foodTypes;
+  return foodTypes.toSet().toList();
 }

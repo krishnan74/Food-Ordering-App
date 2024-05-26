@@ -108,7 +108,7 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
                     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
                     style: TextStyle(color: Colors.grey[500]),
                   ),
-                  SizedBox(height: 10.0),
+                  SizedBox(height: 20.0),
                   Text(
                     "Choose your variation ",
                     style: TextStyle(
@@ -116,50 +116,61 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  GridView.count(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true, // Added to ensure GridView takes up only the required space
-                    crossAxisCount: 2, // Number of columns
+                  SizedBox(height: 15.0),
+                  Column(
+
                     children: [
-                      CustomCheckBox(
-                        isChecked: variation1Check,
-                        onChecked: () {
-                          setState(() {
-                            variation1Check = !variation1Check;
-                          });
-                        },
-                        variationString: food.variation1,
-                        variationPrice: food.price1,
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          CustomCheckBox(
+                            isChecked: variation1Check,
+                            onChecked: () {
+                              setState(() {
+                                variation1Check = !variation1Check;
+                              });
+                            },
+                            variationString: food.variation1,
+                            variationPrice: food.price1,
+                          ),
+                          CustomCheckBox(
+                            isChecked: variation2Check,
+                            onChecked: () {
+                              setState(() {
+                                variation2Check = !variation2Check;
+                              });
+                            },
+                            variationString: food.variation2,
+                            variationPrice: food.price2,
+                          ),
+                        ],
                       ),
-                      CustomCheckBox(
-                        isChecked: variation2Check,
-                        onChecked: () {
-                          setState(() {
-                            variation2Check = !variation2Check;
-                          });
-                        },
-                        variationString: food.variation2,
-                        variationPrice: food.price2,
-                      ),
-                      CustomCheckBox(
-                        isChecked: variation3Check,
-                        onChecked: () {
-                          setState(() {
-                            variation3Check = !variation3Check;
-                          });
-                        },
-                        variationString: food.variation3,
-                        variationPrice: food.price3,
-                      ),
-                      CustomCheckBox(
-                        isChecked: variation4Check,
-                        onChecked: () {
-                          setState(() {
-                            variation4Check = !variation4Check;
-                          });
-                        },
-                        variationString: food.variation4,
-                        variationPrice: food.price4,
+                      SizedBox(height: 10.0,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          CustomCheckBox(
+                            isChecked: variation3Check,
+                            onChecked: () {
+                              setState(() {
+                                variation3Check = !variation3Check;
+                              });
+                            },
+                            variationString: food.variation3,
+                            variationPrice: food.price3,
+                          ),
+                          CustomCheckBox(
+                            isChecked: variation4Check,
+                            onChecked: () {
+                              setState(() {
+                                variation4Check = !variation4Check;
+                              });
+                            },
+                            variationString: food.variation4,
+                            variationPrice: food.price4,
+                          ),
+                        ],
                       )
                     ],
                   ),
