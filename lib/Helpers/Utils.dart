@@ -8,7 +8,7 @@ Future<void> addToCart(Food food, bool variation1Check, bool variation2Check, bo
   double foodPrice = food.foodRate;
   List<String> variations = [];
 
-  // Calculate total price based on variations
+  
   if (variation1Check) {
     foodPrice += food.price1;
     variations.add(food.variation1);
@@ -38,7 +38,7 @@ Future<void> addToCart(Food food, bool variation1Check, bool variation2Check, bo
       {'foodName': food.foodName, 'foodCuisine': food.foodCuisine, 'foodPrice': foodPrice, 'quantity': quantity, 'totalPrice': totalPrice, 'variations': variations}
     ]);
 
-    // Show toast for successful update
+    
     Fluttertoast.showToast(
       msg: "Item added to cart successfully",
       toastLength: Toast.LENGTH_SHORT,
@@ -49,10 +49,10 @@ Future<void> addToCart(Food food, bool variation1Check, bool variation2Check, bo
       fontSize: 16.0,
     );
   } catch (error) {
-    // Handle error
+    
     print("Error: $error");
 
-    // Show toast for error
+    
     Fluttertoast.showToast(
       msg: "Error adding item to cart",
       toastLength: Toast.LENGTH_SHORT,
@@ -86,7 +86,7 @@ Future<void> removeFromCart( int id , SupabaseClient supabase) async {
     //   fontSize: 16.0,
     // );
   } catch (error) {
-    // Handle error
+   
     print("Error: $error");
 
     // Show toast for error
