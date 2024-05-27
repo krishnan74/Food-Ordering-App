@@ -43,7 +43,7 @@ class CustomCheckBox extends StatelessWidget {
                       fontSize: 13.0,
                       fontWeight: FontWeight.bold,
                         color: isChecked ? Colors.white : Color.fromRGBO(0,0,0,1)
-                      // Adjust font size as needed
+
                     ),
                   ),
 
@@ -51,7 +51,7 @@ class CustomCheckBox extends StatelessWidget {
                   '+\$$variationPrice',
                   style: TextStyle(
                     fontSize: 16.0,
-                    color: isChecked ? Color.fromRGBO(255, 255, 255, 0.8): Color.fromRGBO(251, 127, 107, 1.0)// Adjust font size as needed
+                    color: isChecked ? Color.fromRGBO(255, 255, 255, 0.8): Color.fromRGBO(251, 127, 107, 1.0)
                   ),
                 ),
               ],

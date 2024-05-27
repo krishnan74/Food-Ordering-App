@@ -29,7 +29,7 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
   @override
   void initState() {
     super.initState();
-    // You can perform any initialization tasks here
+
   }
 
   @override

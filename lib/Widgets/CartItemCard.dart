@@ -20,67 +20,96 @@ class CartItemCard extends StatelessWidget {
 
         
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
         children: [
-          Column(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(cartItem.foodName, style: TextStyle(
-                fontSize: 17.0,
-                fontWeight: FontWeight.bold,
-
-              ),),
-              Row(
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(cartItem.foodCuisine,  style: TextStyle(
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.grey
+                  Text(cartItem.foodName, style: TextStyle(
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.bold,
 
                   ),),
-                  SizedBox(width: 10.0),
-                  Text('\$ ${cartItem.foodPrice.toString()}', style: TextStyle(
-                      color: Color.fromRGBO(251,127,107, 0.6),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15.0
-                  ),),
-                  SizedBox(width: 5.0),
-                  Text('x ${cartItem.quantity.toString()}', style: TextStyle(
-                      color: Color.fromRGBO(251,127,107, 0.6),
+                  Row(
+                    children: [
+                      Text(cartItem.foodCuisine,  style: TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.grey
+
+                      ),),
+                      SizedBox(width: 10.0),
+                      Text('\$ ${cartItem.foodPrice.toString()}', style: TextStyle(
+                          color: Color.fromRGBO(251,127,107, 0.6),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15.0
+                      ),),
+                      SizedBox(width: 5.0),
+                      Text('x ${cartItem.quantity.toString()}', style: TextStyle(
+                          color: Color.fromRGBO(251,127,107, 0.6),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15.0
+                      ),)
+                    ],
+                  ),
+                ],
+              ),
+              Container(
+                  padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30.0),
+                    color: Color.fromRGBO(253, 253, 253, 1.0),
+                  ),
+                  child: Text('\$ ${cartItem.totalPrice.toString()}', style: TextStyle(
+                      color: Color.fromRGBO(251,127,107, 1.0),
                       fontWeight: FontWeight.bold,
                       fontSize: 15.0
                   ),)
-                ],
               ),
+              GestureDetector(
+                onTap: onTap,
+                child: Container(
+                  padding: EdgeInsets.all(5.0),
+
+                  decoration: BoxDecoration(
+                      color: Colors.redAccent,
+                      borderRadius: BorderRadius.circular(10.0)
+                  ),
+                  child:Icon(Icons.remove, color: Colors.white)
+                )
+
+              )
+
             ],
           ),
           Container(
-              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30.0),
-                color: Color.fromRGBO(253, 253, 253, 1.0),
-              ),
-              child: Text('\$ ${cartItem.totalPrice.toString()}', style: TextStyle(
-                  color: Color.fromRGBO(251,127,107, 1.0),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15.0
-              ),)
-          ),
-          GestureDetector(
-            onTap: onTap,
-            child: Container(
-              padding: EdgeInsets.all(5.0),
-
-              decoration: BoxDecoration(
-                  color: Colors.redAccent,
-                  borderRadius: BorderRadius.circular(10.0)
-              ),
-              child:Icon(Icons.remove, color: Colors.white)
-            )
-
+            height: 20,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: cartItem.variations != null
+                  ? cartItem.variations!.map((variation) {
+                if (variation != null) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 10.0, top: 5.0),
+                    child: Text(
+                      variation.toString(),
+                      style: TextStyle(fontSize: 10.0),
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              }).toList()
+                  : [],
+            ),
           )
+
+
+
 
         ],
       ),

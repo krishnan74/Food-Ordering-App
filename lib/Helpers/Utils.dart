@@ -6,12 +6,28 @@ import '../main.dart';
 
 Future<void> addToCart(Food food, bool variation1Check, bool variation2Check, bool variation3Check, bool variation4Check, int quantity, SupabaseClient supabase) async {
   double foodPrice = food.foodRate;
+  List<String> variations = [];
 
   // Calculate total price based on variations
-  if (variation1Check) foodPrice += food.price1;
-  if (variation2Check) foodPrice += food.price2;
-  if (variation3Check) foodPrice += food.price3;
-  if (variation4Check) foodPrice += food.price4;
+  if (variation1Check) {
+    foodPrice += food.price1;
+    variations.add(food.variation1);
+  }
+
+  if (variation2Check){
+    foodPrice += food.price2;
+    variations.add(food.variation2);
+  }
+
+  if (variation3Check){
+    foodPrice += food.price3;
+    variations.add(food.variation3);
+  }
+
+  if (variation4Check){
+    foodPrice += food.price4;
+    variations.add(food.variation4);
+  }
 
   double totalPrice = foodPrice * quantity;
 
@@ -19,7 +35,7 @@ Future<void> addToCart(Food food, bool variation1Check, bool variation2Check, bo
     await supabase
         .from('cartTable')
         .insert([
-      {'foodName': food.foodName, 'foodCuisine': food.foodCuisine, 'foodPrice': foodPrice, 'quantity': quantity, 'totalPrice': totalPrice}
+      {'foodName': food.foodName, 'foodCuisine': food.foodCuisine, 'foodPrice': foodPrice, 'quantity': quantity, 'totalPrice': totalPrice, 'variations': variations}
     ]);
 
     // Show toast for successful update
@@ -48,6 +64,7 @@ Future<void> addToCart(Food food, bool variation1Check, bool variation2Check, bo
     );
   }
 }
+
 
 
 Future<void> removeFromCart( int id , SupabaseClient supabase) async {
