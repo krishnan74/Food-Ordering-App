@@ -19,7 +19,7 @@ class CustomCheckBox extends StatelessWidget {
     return GestureDetector(
       onTap: onChecked,
       child: Container(
-        width: 161.9,
+        width: 158.0,
         padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
