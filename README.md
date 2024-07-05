@@ -1,16 +1,19 @@
-# epicure_intern_task
+# Foodie Flutter App
 
-A new Flutter project.
+Foodie is a Flutter-based food ordering application that allows users to browse various restaurants, explore menus, place orders, and track delivery status in real-time.
 
-## Getting Started
+## Tech Stack
 
-This project is a starting point for a Flutter application.
+- **Frontend:** Flutter, Dart
+- **Database:** Supabase
 
-A few resources to get you started if this is your first Flutter project:
+## Installation
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/krishnan74/Food-Ordering-App.git
+   cd Food-Ordering-App
+   
+2. **Install Flutter dependencies:**
+  ```bash
+  flutter pub get
